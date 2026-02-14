@@ -6,6 +6,8 @@ GitHub風の草グラフで習慣の達成状況を可視化するスマホフ�
 
 - Next.js 15 (App Router) + TypeScript (strict)
 - shadcn/ui + Tailwind CSS v4
+- Biome（リンター + フォーマッター）
+- Vitest + React Testing Library（テスト）
 - date-fns / next-themes / SVG自作グラフ
 - pnpm
 
@@ -13,7 +15,10 @@ GitHub風の草グラフで習慣の達成状況を可視化するスマホフ�
 
 - `pnpm dev` — 開発サーバー
 - `pnpm build` — ビルド
-- `pnpm lint` — Lint
+- `pnpm check` — Biome リント + フォーマットチェック
+- `pnpm check:fix` — Biome 自動修正
+- `pnpm test` — Vitest（watchモード）
+- `pnpm test:run` — Vitest（単発実行）
 
 ## Architecture
 

@@ -1,0 +1,87 @@
+# CI ワークフロー
+# main ブランチへの PR 作成・更新時にリント・テストを実行する
+
+name: CI
+
+# ────────────────────────────────────────────
+# トリガー条件
+# main への PR が作成・更新されたときに実行
+# ────────────────────────────────────────────
+on:
+  pull_request:
+    branches: [main]
+
+# ────────────────────────────────────────────
+# 同時実行制御
+# 同じ PR で新しいコミットが push されたら
+# 実行中のワークフローをキャンセルして最新のみ実行
+# ────────────────────────────────────────────
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ──────────────────────────────────────────
+  # リントジョブ
+  # Biome による静的解析・フォーマットチェック
+  # ──────────────────────────────────────────
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      # リポジトリのチェックアウト
+      - uses: actions/checkout@v4
+
+      # pnpm のセットアップ
+      - uses: pnpm/action-setup@v4
+
+      # Node.js のセットアップ + pnpm キャッシュの復元
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      # 依存パッケージのインストール（lockfile に従い再現性のあるインストール）
+      - run: pnpm install --frozen-lockfile
+
+      # Biome によるリント・フォーマットチェック
+      - run: pnpm check
+
+  # ──────────────────────────────────────────
+  # テストジョブ
+  # Vitest による単体テスト
+  # ──────────────────────────────────────────
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      # Vitest で単体テストを単発実行（watch モードなし）
+      - run: pnpm test:run
+
+  # ──────────────────────────────────────────
+  # ビルドジョブ
+  # Next.js のプロダクションビルドが通ることを確認
+  # TypeScript の型チェックも兼ねる
+  # ──────────────────────────────────────────
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      # Next.js のビルド（TypeScript の型エラーがあればここで失敗する）
+      - run: pnpm build

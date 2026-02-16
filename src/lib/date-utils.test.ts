@@ -36,26 +36,17 @@ describe("parseDate", () => {
 
 describe("getDatesInRange", () => {
 	it("開始日から終了日までの日付キー配列を返す", () => {
-		const result = getDatesInRange(
-			new Date(2026, 0, 1),
-			new Date(2026, 0, 3),
-		);
+		const result = getDatesInRange(new Date(2026, 0, 1), new Date(2026, 0, 3));
 		expect(result).toEqual(["2026-01-01", "2026-01-02", "2026-01-03"]);
 	});
 
 	it("同じ日付の場合は1要素の配列を返す", () => {
-		const result = getDatesInRange(
-			new Date(2026, 0, 1),
-			new Date(2026, 0, 1),
-		);
+		const result = getDatesInRange(new Date(2026, 0, 1), new Date(2026, 0, 1));
 		expect(result).toEqual(["2026-01-01"]);
 	});
 
 	it("月をまたぐ範囲を正しく処理する", () => {
-		const result = getDatesInRange(
-			new Date(2026, 0, 30),
-			new Date(2026, 1, 2),
-		);
+		const result = getDatesInRange(new Date(2026, 0, 30), new Date(2026, 1, 2));
 		expect(result).toEqual([
 			"2026-01-30",
 			"2026-01-31",

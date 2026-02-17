@@ -103,7 +103,9 @@ describe("habit-store", () => {
 		});
 
 		it("存在しないIDの場合はエラーを投げる", () => {
-			expect(() => updateHabit(storage, "nonexistent", { name: "test" })).toThrow();
+			expect(() =>
+				updateHabit(storage, "nonexistent", { name: "test" }),
+			).toThrow();
 		});
 	});
 

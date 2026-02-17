@@ -29,16 +29,12 @@ export function useLocalStorage<T>(
 		}
 	}, [key, storedValue]);
 
-	const setValue = useCallback(
-		(value: T | ((prev: T) => T)) => {
-			setStoredValue((prev) => {
-				const nextValue =
-					value instanceof Function ? value(prev) : value;
-				return nextValue;
-			});
-		},
-		[],
-	);
+	const setValue = useCallback((value: T | ((prev: T) => T)) => {
+		setStoredValue((prev) => {
+			const nextValue = value instanceof Function ? value(prev) : value;
+			return nextValue;
+		});
+	}, []);
 
 	return [storedValue, setValue];
 }

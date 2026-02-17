@@ -22,10 +22,7 @@ export function useRecords(habitId: string) {
 	);
 
 	// 連続日数
-	const streak = useMemo(
-		() => calculateStreak(records, getToday()),
-		[records],
-	);
+	const streak = useMemo(() => calculateStreak(records, getToday()), [records]);
 
 	const toggleRecord = useCallback(
 		(date: string) => {

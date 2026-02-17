@@ -30,15 +30,11 @@ export function useMilestone(habitId: string, streak: number) {
 	);
 
 	// 次のマイルストーン
-	const nextMilestone = useMemo(
-		() => getNextMilestone(streak),
-		[streak],
-	);
+	const nextMilestone = useMemo(() => getNextMilestone(streak), [streak]);
 
 	// マイルストーンメッセージ
 	const milestoneMessage = useMemo(
-		() =>
-			currentMilestone ? getMilestoneMessage(currentMilestone) : null,
+		() => (currentMilestone ? getMilestoneMessage(currentMilestone) : null),
 		[currentMilestone],
 	);
 

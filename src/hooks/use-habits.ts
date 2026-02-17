@@ -8,17 +8,12 @@ const STORAGE_KEY = "kusa-hayasu:habits";
 
 /** 習慣のCRUD操作を提供するフック */
 export function useHabits() {
-	const [allHabits, setAllHabits] = useLocalStorage<Habit[]>(
-		STORAGE_KEY,
-		[],
-	);
+	const [allHabits, setAllHabits] = useLocalStorage<Habit[]>(STORAGE_KEY, []);
 
 	// アクティブな習慣（archivedAtがundefined）
 	const habits = useMemo(
 		() =>
-			allHabits
-				.filter((h) => !h.archivedAt)
-				.sort((a, b) => a.order - b.order),
+			allHabits.filter((h) => !h.archivedAt).sort((a, b) => a.order - b.order),
 		[allHabits],
 	);
 
@@ -68,9 +63,7 @@ export function useHabits() {
 		(id: string) => {
 			setAllHabits((prev) =>
 				prev.map((h) =>
-					h.id === id
-						? { ...h, archivedAt: new Date().toISOString() }
-						: h,
+					h.id === id ? { ...h, archivedAt: new Date().toISOString() } : h,
 				),
 			);
 		},

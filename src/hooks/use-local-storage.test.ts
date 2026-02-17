@@ -8,26 +8,20 @@ describe("useLocalStorage", () => {
 	});
 
 	it("初期値を返す（localStorageが空の場合）", () => {
-		const { result } = renderHook(() =>
-			useLocalStorage("test-key", "default"),
-		);
+		const { result } = renderHook(() => useLocalStorage("test-key", "default"));
 		expect(result.current[0]).toBe("default");
 	});
 
 	it("localStorageに保存された値を読み込む", () => {
 		localStorage.setItem("test-key", JSON.stringify("stored-value"));
 
-		const { result } = renderHook(() =>
-			useLocalStorage("test-key", "default"),
-		);
+		const { result } = renderHook(() => useLocalStorage("test-key", "default"));
 
 		expect(result.current[0]).toBe("stored-value");
 	});
 
 	it("値を更新するとlocalStorageにも保存される", () => {
-		const { result } = renderHook(() =>
-			useLocalStorage("test-key", "default"),
-		);
+		const { result } = renderHook(() => useLocalStorage("test-key", "default"));
 
 		act(() => {
 			result.current[1]("new-value");
@@ -51,9 +45,7 @@ describe("useLocalStorage", () => {
 
 	it("オブジェクトを保存・取得できる", () => {
 		const initial = { name: "test", count: 0 };
-		const { result } = renderHook(() =>
-			useLocalStorage("test-key", initial),
-		);
+		const { result } = renderHook(() => useLocalStorage("test-key", initial));
 
 		act(() => {
 			result.current[1]({ name: "updated", count: 5 });

@@ -20,7 +20,8 @@ export function addHabit(
 	data: { name: string; color: string; animationPattern: AnimationPattern },
 ): Habit {
 	const habits = getHabits(storage);
-	const maxOrder = habits.length > 0 ? Math.max(...habits.map((h) => h.order)) + 1 : 0;
+	const maxOrder =
+		habits.length > 0 ? Math.max(...habits.map((h) => h.order)) + 1 : 0;
 
 	const habit: Habit = {
 		id: crypto.randomUUID(),

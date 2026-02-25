@@ -3,13 +3,17 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ButtonView } from "@/components/habit/button-view";
+import { CalendarView } from "@/components/habit/calendar-view";
 import { Button } from "@/components/ui/button";
 import { useHabits } from "@/hooks/use-habits";
 import { useMilestone } from "@/hooks/use-milestone";
 import { useRecords } from "@/hooks/use-records";
+import { useSwipe } from "@/hooks/use-swipe";
 import { getToday } from "@/lib/date-utils";
 
-/** 習慣のドットインジケーター（複数習慣がある場合に表示） */
+type ViewMode = "button" | "calendar";
+
+/** 習慣のドットインジケーター（複数習慣がある場合のみ表示） */
 function HabitDots({
 	total,
 	current,
@@ -38,22 +42,38 @@ function HabitDots({
 	);
 }
 
-/** 指定習慣のボタンビュー */
-function HabitButtonView({ habitId }: { habitId: string }) {
+/** 習慣1件のボタン or カレンダービューをhookと接続するコンポーネント */
+function HabitView({
+	habitId,
+	viewMode,
+}: {
+	habitId: string;
+	viewMode: ViewMode;
+}) {
 	const { habits } = useHabits();
 	const habit = habits.find((h) => h.id === habitId);
-	const { streak, toggleRecord, isCompletedOn } = useRecords(habitId);
+	const { records, streak, toggleRecord, isCompletedOn } = useRecords(habitId);
 	const { nextMilestone } = useMilestone(habitId, streak);
 
 	if (!habit) return null;
 
 	const today = getToday();
-	const completed = isCompletedOn(today);
+
+	if (viewMode === "calendar") {
+		return (
+			<CalendarView
+				habitName={habit.name}
+				color={habit.color}
+				records={records}
+				onToggle={toggleRecord}
+			/>
+		);
+	}
 
 	return (
 		<ButtonView
 			habitName={habit.name}
-			completed={completed}
+			completed={isCompletedOn(today)}
 			color={habit.color}
 			streak={streak}
 			nextMilestone={nextMilestone}
@@ -65,11 +85,24 @@ function HabitButtonView({ habitId }: { habitId: string }) {
 export default function Home() {
 	const { habits } = useHabits();
 	const [currentIndex, setCurrentIndex] = useState(0);
+	const [viewMode, setViewMode] = useState<ViewMode>("button");
 	const [mounted, setMounted] = useState(false);
 
 	useEffect(() => {
 		setMounted(true);
 	}, []);
+
+	const safeIndex = Math.min(currentIndex, Math.max(habits.length - 1, 0));
+
+	const { onTouchStart, onTouchEnd } = useSwipe({
+		// 横スワイプ: 習慣切替
+		onSwipeLeft: () =>
+			setCurrentIndex((i) => Math.min(i + 1, habits.length - 1)),
+		onSwipeRight: () => setCurrentIndex((i) => Math.max(i - 1, 0)),
+		// 縦スワイプ: ボタン↔カレンダーのビュー切替
+		onSwipeDown: () => setViewMode("button"),
+		onSwipeUp: () => setViewMode("calendar"),
+	});
 
 	// hydration 前はレンダリングしない（localStorage との mismatch を防止）
 	if (!mounted) return null;
@@ -88,12 +121,13 @@ export default function Home() {
 		);
 	}
 
-	const safeIndex = Math.min(currentIndex, habits.length - 1);
-	const currentHabit = habits[safeIndex];
-
 	return (
-		<main className="flex min-h-svh flex-col items-center justify-center gap-6 pb-20">
-			<HabitButtonView habitId={currentHabit.id} />
+		<main
+			className="flex min-h-svh flex-col items-center justify-center gap-6 pb-20"
+			onTouchStart={onTouchStart}
+			onTouchEnd={onTouchEnd}
+		>
+			<HabitView habitId={habits[safeIndex].id} viewMode={viewMode} />
 			<HabitDots
 				total={habits.length}
 				current={safeIndex}

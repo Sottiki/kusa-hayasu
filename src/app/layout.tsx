@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { BottomNavWrapper } from "@/components/navigation/bottom-nav-wrapper";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
@@ -41,6 +42,7 @@ export default function RootLayout({
 					disableTransitionOnChange
 				>
 					{children}
+					<BottomNavWrapper />
 				</ThemeProvider>
 			</body>
 		</html>

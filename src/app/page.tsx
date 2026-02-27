@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { CelebrationOverlay } from "@/components/celebration/celebration-overlay";
 import { ButtonView } from "@/components/habit/button-view";
 import { CalendarView } from "@/components/habit/calendar-view";
 import { Button } from "@/components/ui/button";
@@ -42,7 +43,7 @@ function HabitDots({
 	);
 }
 
-/** 習慣1件のボタン or カレンダービューをhookと接続するコンポーネント */
+/** 習慣1件のビューをhookと接続するコンポーネント */
 function HabitView({
 	habitId,
 	viewMode,
@@ -53,32 +54,43 @@ function HabitView({
 	const { habits } = useHabits();
 	const habit = habits.find((h) => h.id === habitId);
 	const { records, streak, toggleRecord, isCompletedOn } = useRecords(habitId);
-	const { nextMilestone } = useMilestone(habitId, streak);
+	const { currentMilestone, milestoneMessage, nextMilestone, celebrate } =
+		useMilestone(habitId, streak);
 
 	if (!habit) return null;
 
 	const today = getToday();
 
-	if (viewMode === "calendar") {
-		return (
-			<CalendarView
-				habitName={habit.name}
-				color={habit.color}
-				records={records}
-				onToggle={toggleRecord}
-			/>
-		);
-	}
-
 	return (
-		<ButtonView
-			habitName={habit.name}
-			completed={isCompletedOn(today)}
-			color={habit.color}
-			streak={streak}
-			nextMilestone={nextMilestone}
-			onToggle={() => toggleRecord(today)}
-		/>
+		<>
+			{viewMode === "calendar" ? (
+				<CalendarView
+					habitName={habit.name}
+					color={habit.color}
+					records={records}
+					onToggle={toggleRecord}
+				/>
+			) : (
+				<ButtonView
+					habitName={habit.name}
+					completed={isCompletedOn(today)}
+					color={habit.color}
+					streak={streak}
+					nextMilestone={nextMilestone}
+					onToggle={() => toggleRecord(today)}
+				/>
+			)}
+
+			{/* マイルストーン達成時のお祝いオーバーレイ */}
+			<CelebrationOverlay
+				isOpen={currentMilestone !== null}
+				pattern={habit.animationPattern}
+				milestone={currentMilestone ?? 0}
+				message={milestoneMessage ?? ""}
+				color={habit.color}
+				onClose={celebrate}
+			/>
+		</>
 	);
 }
 
@@ -93,6 +105,7 @@ export default function Home() {
 	}, []);
 
 	const safeIndex = Math.min(currentIndex, Math.max(habits.length - 1, 0));
+	const currentHabit = habits[safeIndex];
 
 	const { onTouchStart, onTouchEnd } = useSwipe({
 		// 横スワイプ: 習慣切替
@@ -126,6 +139,12 @@ export default function Home() {
 			className="flex min-h-svh flex-col items-center justify-center gap-6 pb-20"
 			onTouchStart={onTouchStart}
 			onTouchEnd={onTouchEnd}
+			style={
+				{
+					// 現在の習慣の色をCSS変数としてサブツリーに提供
+					"--habit-color": currentHabit?.color,
+				} as React.CSSProperties
+			}
 		>
 			<HabitView habitId={habits[safeIndex].id} viewMode={viewMode} />
 			<HabitDots

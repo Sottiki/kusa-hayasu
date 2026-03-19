@@ -1,3 +1,4 @@
+import { generateId } from "@/lib/utils";
 import type { HabitRecord } from "@/types/habit";
 
 const STORAGE_KEY = "kusa-hayasu:records";
@@ -36,7 +37,7 @@ export function toggleRecord(
 	if (index === -1) {
 		// 新規作成
 		const record: HabitRecord = {
-			id: crypto.randomUUID(),
+			id: generateId(),
 			habitId,
 			date,
 			completed: true,

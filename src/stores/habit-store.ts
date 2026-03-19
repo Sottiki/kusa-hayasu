@@ -1,3 +1,4 @@
+import { generateId } from "@/lib/utils";
 import type { AnimationPattern, Habit } from "@/types/habit";
 
 const STORAGE_KEY = "kusa-hayasu:habits";
@@ -24,7 +25,7 @@ export function addHabit(
 		habits.length > 0 ? Math.max(...habits.map((h) => h.order)) + 1 : 0;
 
 	const habit: Habit = {
-		id: crypto.randomUUID(),
+		id: generateId(),
 		name: data.name,
 		color: data.color,
 		animationPattern: data.animationPattern,

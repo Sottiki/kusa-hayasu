@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, Settings } from "lucide-react";
+import { Home, LayoutList, ListChecks, Settings } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -17,8 +17,18 @@ const NAV_ITEMS: NavItem[] = [
 		icon: <Home className="h-5 w-5" />,
 	},
 	{
+		href: "/activity",
+		label: "アクティビティ",
+		icon: <LayoutList className="h-5 w-5" />,
+	},
+	{
 		href: "/manage",
 		label: "管理",
+		icon: <ListChecks className="h-5 w-5" />,
+	},
+	{
+		href: "/settings",
+		label: "設定",
 		icon: <Settings className="h-5 w-5" />,
 	},
 ];

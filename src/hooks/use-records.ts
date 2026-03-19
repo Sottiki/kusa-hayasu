@@ -3,6 +3,7 @@
 import { useCallback, useMemo } from "react";
 import { getToday } from "@/lib/date-utils";
 import { calculateStreak } from "@/lib/grass-utils";
+import { generateId } from "@/lib/utils";
 import type { HabitRecord } from "@/types/habit";
 import { useLocalStorage } from "./use-local-storage";
 
@@ -33,7 +34,7 @@ export function useRecords(habitId: string) {
 				if (index === -1) {
 					// 新規作成
 					const record: HabitRecord = {
-						id: crypto.randomUUID(),
+						id: generateId(),
 						habitId,
 						date,
 						completed: true,

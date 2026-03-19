@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useMemo } from "react";
+import { generateId } from "@/lib/utils";
 import type { AnimationPattern, Habit } from "@/types/habit";
 import { useLocalStorage } from "./use-local-storage";
 
@@ -34,7 +35,7 @@ export function useHabits() {
 					? Math.max(...allHabits.map((h) => h.order)) + 1
 					: 0;
 			const habit: Habit = {
-				id: crypto.randomUUID(),
+				id: generateId(),
 				name: data.name,
 				color: data.color,
 				animationPattern: data.animationPattern,

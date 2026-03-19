@@ -36,4 +36,31 @@ describe("BottomNav", () => {
 			"page",
 		);
 	});
+
+	it("アクティビティリンクを表示する", () => {
+		render(<BottomNav currentPath="/" />);
+		expect(
+			screen.getByRole("link", { name: "アクティビティ" }),
+		).toBeInTheDocument();
+	});
+
+	it("設定リンクを表示する", () => {
+		render(<BottomNav currentPath="/" />);
+		expect(screen.getByRole("link", { name: "設定" })).toBeInTheDocument();
+	});
+
+	it("アクティビティページではアクティビティリンクがアクティブになる", () => {
+		render(<BottomNav currentPath="/activity" />);
+		expect(
+			screen.getByRole("link", { name: "アクティビティ" }),
+		).toHaveAttribute("aria-current", "page");
+	});
+
+	it("設定ページでは設定リンクがアクティブになる", () => {
+		render(<BottomNav currentPath="/settings" />);
+		expect(screen.getByRole("link", { name: "設定" })).toHaveAttribute(
+			"aria-current",
+			"page",
+		);
+	});
 });

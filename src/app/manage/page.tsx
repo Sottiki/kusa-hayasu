@@ -21,8 +21,15 @@ type FormData = {
 };
 
 export default function ManagePage() {
-	const { habits, archivedHabits, addHabit, updateHabit, archiveHabit, unarchiveHabit, deleteHabit } =
-		useHabits();
+	const {
+		habits,
+		archivedHabits,
+		addHabit,
+		updateHabit,
+		archiveHabit,
+		unarchiveHabit,
+		deleteHabit,
+	} = useHabits();
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [editingHabit, setEditingHabit] = useState<Habit | null>(null);
 

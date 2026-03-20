@@ -3,6 +3,7 @@
 import type { AnimationPattern } from "@/types/habit";
 import { Festival } from "./patterns/festival";
 import { GrassBurst } from "./patterns/grass-burst";
+import { Super } from "./patterns/super";
 import { Toast } from "./patterns/toast";
 
 type CelebrationOverlayProps = {
@@ -33,9 +34,11 @@ export function CelebrationOverlay({
 			aria-label={`${milestone}日達成！`}
 			className="fixed inset-0 z-50"
 		>
-			{pattern === "festival" && <Festival {...commonProps} />}
-			{pattern === "toast" && <Toast {...commonProps} />}
-			{pattern === "grass-burst" && <GrassBurst {...commonProps} />}
+			{/* 365日はパターン設定によらずスーパーアニメーションを表示 */}
+			{milestone === 365 && <Super {...commonProps} />}
+			{milestone !== 365 && pattern === "festival" && <Festival {...commonProps} />}
+			{milestone !== 365 && pattern === "toast" && <Toast {...commonProps} />}
+			{milestone !== 365 && pattern === "grass-burst" && <GrassBurst {...commonProps} />}
 		</div>
 	);
 }

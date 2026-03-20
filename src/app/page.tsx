@@ -147,11 +147,30 @@ export default function Home() {
 			}
 		>
 			<HabitView habitId={habits[safeIndex].id} viewMode={viewMode} />
-			<HabitDots
-				total={habits.length}
-				current={safeIndex}
-				onSelect={setCurrentIndex}
-			/>
+			<div className="flex flex-col items-center gap-3">
+				<HabitDots
+					total={habits.length}
+					current={safeIndex}
+					onSelect={setCurrentIndex}
+				/>
+				{viewMode === "button" ? (
+					<button
+						type="button"
+						className="text-sm text-muted-foreground underline-offset-4 hover:underline"
+						onClick={() => setViewMode("calendar")}
+					>
+						カレンダーを見る
+					</button>
+				) : (
+					<button
+						type="button"
+						className="text-sm text-muted-foreground underline-offset-4 hover:underline"
+						onClick={() => setViewMode("button")}
+					>
+						← 達成ボタンに戻る
+					</button>
+				)}
+			</div>
 		</main>
 	);
 }

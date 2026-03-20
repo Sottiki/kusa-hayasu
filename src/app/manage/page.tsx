@@ -21,8 +21,15 @@ type FormData = {
 };
 
 export default function ManagePage() {
-	const { habits, addHabit, updateHabit, archiveHabit, deleteHabit } =
-		useHabits();
+	const {
+		habits,
+		archivedHabits,
+		addHabit,
+		updateHabit,
+		archiveHabit,
+		unarchiveHabit,
+		deleteHabit,
+	} = useHabits();
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [editingHabit, setEditingHabit] = useState<Habit | null>(null);
 
@@ -61,8 +68,10 @@ export default function ManagePage() {
 				</div>
 				<HabitList
 					habits={habits}
+					archivedHabits={archivedHabits}
 					onEdit={handleEdit}
 					onArchive={archiveHabit}
+					onUnarchive={unarchiveHabit}
 					onDelete={deleteHabit}
 				/>
 			</div>

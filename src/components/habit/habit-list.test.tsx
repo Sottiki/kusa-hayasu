@@ -4,6 +4,18 @@ import { describe, expect, it, vi } from "vitest";
 import type { Habit } from "@/types/habit";
 import { HabitList } from "./habit-list";
 
+const mockArchivedHabits: Habit[] = [
+	{
+		id: "3",
+		name: "瞑想",
+		color: "#a855f7",
+		animationPattern: "grass-burst",
+		createdAt: "2024-01-01T00:00:00Z",
+		archivedAt: "2024-06-01T00:00:00Z",
+		order: 2,
+	},
+];
+
 const mockHabits: Habit[] = [
 	{
 		id: "1",
@@ -128,5 +140,56 @@ describe("HabitList", () => {
 		await user.click(screen.getAllByRole("button", { name: "削除" })[0]);
 		await user.click(screen.getByRole("button", { name: "キャンセル" }));
 		expect(onDelete).not.toHaveBeenCalled();
+	});
+
+	describe("アーカイブ済みセクション", () => {
+		it("archivedHabitsがある場合にセクションを表示する", () => {
+			render(
+				<HabitList
+					habits={mockHabits}
+					archivedHabits={mockArchivedHabits}
+					onEdit={vi.fn()}
+					onArchive={vi.fn()}
+					onUnarchive={vi.fn()}
+					onDelete={vi.fn()}
+				/>,
+			);
+
+			expect(screen.getByText("アーカイブ済み")).toBeInTheDocument();
+			expect(screen.getByText("瞑想")).toBeInTheDocument();
+		});
+
+		it("archivedHabitsが空の場合はセクションを表示しない", () => {
+			render(
+				<HabitList
+					habits={mockHabits}
+					archivedHabits={[]}
+					onEdit={vi.fn()}
+					onArchive={vi.fn()}
+					onUnarchive={vi.fn()}
+					onDelete={vi.fn()}
+				/>,
+			);
+
+			expect(screen.queryByText("アーカイブ済み")).not.toBeInTheDocument();
+		});
+
+		it("復元ボタンをクリックするとonUnarchiveが呼ばれる", async () => {
+			const user = userEvent.setup();
+			const onUnarchive = vi.fn();
+			render(
+				<HabitList
+					habits={mockHabits}
+					archivedHabits={mockArchivedHabits}
+					onEdit={vi.fn()}
+					onArchive={vi.fn()}
+					onUnarchive={onUnarchive}
+					onDelete={vi.fn()}
+				/>,
+			);
+
+			await user.click(screen.getByRole("button", { name: "復元" }));
+			expect(onUnarchive).toHaveBeenCalledWith("3");
+		});
 	});
 });

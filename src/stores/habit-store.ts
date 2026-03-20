@@ -65,6 +65,17 @@ export function archiveHabit(storage: Storage, id: string): void {
 	saveHabits(storage, habits);
 }
 
+/** アーカイブ済み習慣を復元する */
+export function unarchiveHabit(storage: Storage, id: string): void {
+	const habits = getHabits(storage);
+	const index = habits.findIndex((h) => h.id === id);
+	if (index === -1) return;
+
+	const { archivedAt: _, ...rest } = habits[index];
+	habits[index] = rest;
+	saveHabits(storage, habits);
+}
+
 /** 習慣を完全に削除する */
 export function deleteHabit(storage: Storage, id: string): void {
 	const habits = getHabits(storage).filter((h) => h.id !== id);

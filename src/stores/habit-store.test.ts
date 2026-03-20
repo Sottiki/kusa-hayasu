@@ -6,6 +6,7 @@ import {
 	deleteHabit,
 	getHabits,
 	saveHabits,
+	unarchiveHabit,
 	updateHabit,
 } from "./habit-store";
 
@@ -121,6 +122,22 @@ describe("habit-store", () => {
 
 			const all = getHabits(storage);
 			expect(all[0].archivedAt).toBeDefined();
+		});
+	});
+
+	describe("unarchiveHabit", () => {
+		it("アーカイブ済み習慣を復元できる", () => {
+			const habit = addHabit(storage, {
+				name: "読書",
+				color: "#4CAF50",
+				animationPattern: "festival",
+			});
+
+			archiveHabit(storage, habit.id);
+			expect(getHabits(storage)[0].archivedAt).toBeDefined();
+
+			unarchiveHabit(storage, habit.id);
+			expect(getHabits(storage)[0].archivedAt).toBeUndefined();
 		});
 	});
 

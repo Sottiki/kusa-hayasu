@@ -36,9 +36,13 @@ export function CelebrationOverlay({
 		>
 			{/* 365日はパターン設定によらずスーパーアニメーションを表示 */}
 			{milestone === 365 && <Super {...commonProps} />}
-			{milestone !== 365 && pattern === "festival" && <Festival {...commonProps} />}
+			{milestone !== 365 && pattern === "festival" && (
+				<Festival {...commonProps} />
+			)}
 			{milestone !== 365 && pattern === "toast" && <Toast {...commonProps} />}
-			{milestone !== 365 && pattern === "grass-burst" && <GrassBurst {...commonProps} />}
+			{milestone !== 365 && pattern === "grass-burst" && (
+				<GrassBurst {...commonProps} />
+			)}
 		</div>
 	);
 }

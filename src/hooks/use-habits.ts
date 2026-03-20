@@ -71,6 +71,19 @@ export function useHabits() {
 		[setAllHabits],
 	);
 
+	const unarchiveHabit = useCallback(
+		(id: string) => {
+			setAllHabits((prev) =>
+				prev.map((h) => {
+					if (h.id !== id) return h;
+					const { archivedAt: _, ...rest } = h;
+					return rest;
+				}),
+			);
+		},
+		[setAllHabits],
+	);
+
 	const deleteHabit = useCallback(
 		(id: string) => {
 			setAllHabits((prev) => prev.filter((h) => h.id !== id));
@@ -84,6 +97,7 @@ export function useHabits() {
 		addHabit,
 		updateHabit,
 		archiveHabit,
+		unarchiveHabit,
 		deleteHabit,
 	};
 }

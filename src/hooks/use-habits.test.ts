@@ -69,6 +69,33 @@ describe("useHabits", () => {
 		expect(result.current.archivedHabits).toHaveLength(1);
 	});
 
+	it("アーカイブ済み習慣を復元できる", () => {
+		const { result } = renderHook(() => useHabits());
+
+		act(() => {
+			result.current.addHabit({
+				name: "読書",
+				color: "#4CAF50",
+				animationPattern: "festival",
+			});
+		});
+
+		const habitId = result.current.habits[0].id;
+
+		act(() => {
+			result.current.archiveHabit(habitId);
+		});
+
+		expect(result.current.archivedHabits).toHaveLength(1);
+
+		act(() => {
+			result.current.unarchiveHabit(habitId);
+		});
+
+		expect(result.current.habits).toHaveLength(1);
+		expect(result.current.archivedHabits).toHaveLength(0);
+	});
+
 	it("習慣を削除できる", () => {
 		const { result } = renderHook(() => useHabits());
 

@@ -41,7 +41,10 @@ export default function RootLayout({
 					enableSystem
 					disableTransitionOnChange
 				>
-					{children}
+					{/* コンテンツをPC画面でも中央に収める */}
+					<div className="mx-auto w-full max-w-lg">
+						{children}
+					</div>
 					<BottomNavWrapper />
 				</ThemeProvider>
 			</body>

@@ -41,7 +41,7 @@ type BottomNavProps = {
 export function BottomNav({ currentPath }: BottomNavProps) {
 	return (
 		<nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background">
-			<ul className="flex">
+			<ul className="mx-auto flex w-full max-w-lg">
 				{NAV_ITEMS.map((item) => {
 					const isActive = currentPath === item.href;
 					return (

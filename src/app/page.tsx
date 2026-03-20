@@ -150,33 +150,35 @@ export default function Home() {
 			<HabitView habitId={habits[safeIndex].id} viewMode={viewMode} />
 			<div className="flex flex-col items-center gap-3">
 				{/* 矢印ボタン＋ドットナビゲーション（複数習慣がある場合のみ表示） */}
-				{habits.length > 1 && <div className="flex items-center gap-3">
-					<button
-						type="button"
-						aria-label="前の習慣"
-						disabled={safeIndex === 0}
-						className="rounded-full p-1 text-muted-foreground transition-colors hover:text-foreground disabled:opacity-20"
-						onClick={() => setCurrentIndex((i) => Math.max(i - 1, 0))}
-					>
-						<ChevronLeft className="h-5 w-5" />
-					</button>
-					<HabitDots
-						total={habits.length}
-						current={safeIndex}
-						onSelect={setCurrentIndex}
-					/>
-					<button
-						type="button"
-						aria-label="次の習慣"
-						disabled={safeIndex === habits.length - 1}
-						className="rounded-full p-1 text-muted-foreground transition-colors hover:text-foreground disabled:opacity-20"
-						onClick={() =>
-							setCurrentIndex((i) => Math.min(i + 1, habits.length - 1))
-						}
-					>
-						<ChevronRight className="h-5 w-5" />
-					</button>
-				</div>}
+				{habits.length > 1 && (
+					<div className="flex items-center gap-3">
+						<button
+							type="button"
+							aria-label="前の習慣"
+							disabled={safeIndex === 0}
+							className="rounded-full p-1 text-muted-foreground transition-colors hover:text-foreground disabled:opacity-20"
+							onClick={() => setCurrentIndex((i) => Math.max(i - 1, 0))}
+						>
+							<ChevronLeft className="h-5 w-5" />
+						</button>
+						<HabitDots
+							total={habits.length}
+							current={safeIndex}
+							onSelect={setCurrentIndex}
+						/>
+						<button
+							type="button"
+							aria-label="次の習慣"
+							disabled={safeIndex === habits.length - 1}
+							className="rounded-full p-1 text-muted-foreground transition-colors hover:text-foreground disabled:opacity-20"
+							onClick={() =>
+								setCurrentIndex((i) => Math.min(i + 1, habits.length - 1))
+							}
+						>
+							<ChevronRight className="h-5 w-5" />
+						</button>
+					</div>
+				)}
 				{viewMode === "button" ? (
 					<button
 						type="button"

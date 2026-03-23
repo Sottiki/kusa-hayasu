@@ -32,7 +32,12 @@ export function CalendarView({
 	return (
 		<div className="flex w-full flex-col items-center gap-6 px-4">
 			<h1 className="text-xl font-semibold">{habitName}</h1>
-			<GrassGraph cells={cells} color={color} onCellPress={onToggle} />
+			<GrassGraph
+				cells={cells}
+				color={color}
+				onCellPress={onToggle}
+				split={period === "1yr"}
+			/>
 			<PeriodSelector value={period} onChange={setPeriod} />
 		</div>
 	);
